@@ -1,0 +1,40 @@
+<div class="limiter row">
+    <form enctype="multipart/form-data" id="get_id" class="container-login100" method="POST" action="/get_id">
+        <div class="w-100" style="text-align: -webkit-center;">
+            <div class="w-50" style="text-align: -webkit-center;">
+                <div class="wrap-login100">
+                    <i class="material-icons w-100" style="font-size:36px; text-align: center; margin-bottom: 10px;">cloud_upload</i>
+                    <div style='height: 0px;width: 0px; overflow:hidden;'><input id="upfile" name="photo" type="file" value="upload" onchange="sub(this)" /></div>
+                    <a id="uploadButton" type="button" class="w-100 btn btn-primary btn-color" style="color: white; margin-bottom: 10px;" onclick="getFile()">Choose photo to id</a>
+                    <a class="btn button">Or drag and drop it here</a>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-color" style="color: white; align-content: center;">Compute</button>
+    </form>
+</div>
+<script>
+    function getFile() {
+        document.getElementById("upfile").click();
+    }
+
+    function sub(obj) {
+        var file = obj.value;
+        var fileName = file.split("\\");
+        document.getElementById("uploadButton").innerHTML = fileName[fileName.length - 1];
+        if (fileName == '')
+            document.getElementById("uploadButton").innerHTML = "Choose photo to id";
+        event.preventDefault();
+    }
+</script>
+
+<script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
+<script src="/vendor/bootstrap/js/popper.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="/vendor/select2/select2.min.js"></script>
+<script src="/vendor/tilt/tilt.jquery.min.js"></script>
+<script>
+    $('.js-tilt').tilt({
+        scale: 1.1
+    })
+</script>
