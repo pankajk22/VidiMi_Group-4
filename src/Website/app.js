@@ -22,19 +22,19 @@ require('./config/passport')(passport);
 const db = require('./config/keys');
 
 // Connect to Mongo
-var connectionURI = db.getUri();
-mongoose.connect(connectionURI, { useCreateIndex: true, useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log("Mongodb: Connected.."))
-    .catch(err => console.log(err));
-module.exports = {
-    reload: () => {
-        mongoose.disconnect();
-        connectionURI = db.getUri();
-        mongoose.connect(connectionURI, { useCreateIndex: true, useNewUrlParser: true, useUnifiedTopology: true })
-            .then(() => console.log("Mongodb: Connection reloded.."))
-            .catch(err => console.log(err));
-    }
-}
+// var connectionURI = db.getUri();
+// mongoose.connect(connectionURI, { useCreateIndex: true, useNewUrlParser: true, useUnifiedTopology: true })
+//     .then(() => console.log("Mongodb: Connected.."))
+//     .catch(err => console.log(err));
+// module.exports = {
+//     reload: () => {
+//         mongoose.disconnect();
+//         connectionURI = db.getUri();
+//         mongoose.connect(connectionURI, { useCreateIndex: true, useNewUrlParser: true, useUnifiedTopology: true })
+//             .then(() => console.log("Mongodb: Connection reloded.."))
+//             .catch(err => console.log(err));
+//     }
+// }
 
 // EJS
 app.use(expressLayouts);

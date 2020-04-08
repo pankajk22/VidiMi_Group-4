@@ -4,7 +4,7 @@ const { ensureAuthenticated } = require('../config/auth');
 const Joi = require('joi');
 const fs = require('fs')
 var formidable = require('formidable');
-
+const { spawn } = require('child_process');
 
 // Home page redirect to detect_in_photo
 router.get('/', (req, res) => res.redirect('/detect_in_photo'));
@@ -46,21 +46,63 @@ router.post('/detect_in_photo', (req, res) => {
             var response = ''
 
             var oldpath = zip.path;
-            var newpath = '/Users/paradox/Desktop/untitled/' + zip.name;
+            var newpath = __dirname + `/../python/images/${req.sessionID}.zip`;
             fs.rename(oldpath, newpath, function(err) {
                 if (err) throw err;
                 response += 'Zip File uploaded and moved!\n';
             });
             var oldpath = photo.path;
-            var newpath = '/Users/paradox/Desktop/untitled/' + photo.name;
+            var newpath = __dirname + `/../python/${req.sessionID}.jpg`;
             fs.rename(oldpath, newpath, function(err) {
                 if (err) throw err;
                 response += 'Photo uploaded and moved!';
-                res.write(response);
-                res.end();
             });
+
+
+            var faceRecLogs;
+            console.log('\n-----Generating pickle-----\n');
+            const python = spawn('python', ['python/face_rec.py', `${req.sessionID}`]);
+            python.stdout.on('data', function(data) {
+                console.log('Pipe data from python script ...');
+                faceRecLogs = data.toString();
+            });
+            python.on('close', (code) => {
+                console.log(`child process close all stdio with code ${code}`);
+                // send data to browser
+                console.log(faceRecLogs)
+                var faceImageLogs;
+                console.log('\n-----Detecting in picture-----\n');
+                const python = spawn('python', ['python/face_image.py', `${req.sessionID}`]);
+                python.stdout.on('data', function(data) {
+                    console.log('Pipe data from python script ...');
+                    faceImageLogs = data.toString();
+                });
+                python.on('close', (code) => {
+                    console.log(`child process close all stdio with code ${code}`);
+                    // send data to browser
+                    console.log(faceImageLogs)
+                    req.session.img = `/images/dip/${req.sessionID}.png`
+                    res.redirect('detect_in_photo/result')
+                });
+            });
+
         }
     });
+});
+
+// detect_in_photo result Page
+router.get('/detect_in_photo/result', (req, res) => {
+    const img = req.session.img;
+    req.session.img = undefined
+    if (typeof img != 'undefined') {
+        res.render('result_page', {
+            img: img,
+            headingStr: 'Detect in Photo Result',
+            newSearch: '/detect_in_photo'
+        })
+    } else {
+        res.redirect('/detect_in_photo')
+    }
 });
 
 // detect_in_video Page
@@ -199,15 +241,43 @@ router.post('/get_id', (req, res) => {
             var response = ''
 
             var oldpath = photo.path;
-            var newpath = '/Users/paradox/Desktop/untitled/' + photo.name;
+            var newpath = __dirname + `/../python/${req.sessionID}.jpg`;
             fs.rename(oldpath, newpath, function(err) {
                 if (err) throw err;
                 response += 'Photo uploaded and moved!\n';
-                res.write(response);
-                res.end();
+
+                var faceImageLogs;
+                console.log('\n-----Detecting in picture-----\n');
+                const python = spawn('python', ['python/get_id.py', req.sessionID]);
+                python.stdout.on('data', function(data) {
+                    console.log('Pipe data from python script ...');
+                    faceImageLogs = data.toString();
+                });
+                python.on('close', (code) => {
+                    console.log(`child process close all stdio with code ${code}`);
+                    // send data to browser
+                    console.log(faceImageLogs)
+                    req.session.img = `/images/getId/${req.sessionID}.png`
+                    res.redirect('get_id/result')
+                });
             });
         }
     });
+});
+
+// detect_in_photo result Page
+router.get('/get_id/result', (req, res) => {
+    const img = req.session.img;
+    req.session.img = undefined
+    if (typeof img != 'undefined') {
+        res.render('result_page', {
+            img: img,
+            headingStr: 'Get ID Result',
+            newSearch: '/get_id'
+        })
+    } else {
+        res.redirect('/get_id')
+    }
 });
 
 // add_to_db Page
@@ -222,7 +292,7 @@ router.post('/add_to_db', (req, res) => {
             photo: Joi.object({
                 name: Joi.string().required(),
                 path: Joi.string().required(),
-                type: Joi.string().only('image/jpeg').required(),
+                type: Joi.string().only('application/zip').required(),
                 size: Joi.number().required()
             }).unknown(true).required()
         }
@@ -246,12 +316,26 @@ router.post('/add_to_db', (req, res) => {
             var response = ''
 
             var oldpath = photo.path;
-            var newpath = '/Users/paradox/Desktop/untitled/' + photo.name;
+            var newpath = __dirname + `/../python/images/${req.sessionID}.zip`;
             fs.rename(oldpath, newpath, function(err) {
                 if (err) throw err;
                 response += 'Photo uploaded and moved!\n';
-                res.write(response);
-                res.end();
+
+                var faceRecLogs;
+                console.log('\n-----Generating pickle-----\n');
+                const python = spawn('python', ['python/add_to_db.py', req.sessionID, userid]);
+                python.stdout.on('data', function(data) {
+                    console.log('Pipe data from python script ...');
+                    faceRecLogs = data.toString();
+                });
+                python.on('close', (code) => {
+                    console.log(`child process close all stdio with code ${code}`);
+                    // send data to browser
+                    console.log(faceRecLogs)
+                    res.render('add_to_db', {
+                        msg: 'Saved Successfully'
+                    })
+                });
             });
         }
     });

@@ -21,17 +21,17 @@ for root, dirs, files in os.walk(images_dir):
         if fil.endswith("png") or fil.endswith("jpg") or fil.endswith("jpeg"):
             path = os.path.join(root, fil)
             label = os.path.basename(root).replace(" ","-").lower()
-        print(label)
-        img = cv2.imread(path)
-        rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            print(label)
+            img = cv2.imread(path)
+            rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-        box_info = face_recognition.face_locations(rgb, model = "hog")
+            box_info = face_recognition.face_locations(rgb, model = "hog")
 
-        encodings = face_recognition.face_encodings(rgb, box_info)
-        
-        for encod in encodings:
-            known_encodings.append(encod)
-            known_names.append(label)
+            encodings = face_recognition.face_encodings(rgb, box_info)
+            
+            for encod in encodings:
+                known_encodings.append(encod)
+                known_names.append(label)
 
 
 print("Serializing Encodings.")

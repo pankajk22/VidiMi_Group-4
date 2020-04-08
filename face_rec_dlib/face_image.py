@@ -7,7 +7,7 @@ import face_recognition
 print("Load encodings")
 data = pickle.loads(open("labels.pickle", 'rb').read())
 
-sample_img = cv2.imread("5.jpeg")
+sample_img = cv2.imread("5.jpg")
 rgb = cv2.cvtColor(sample_img, cv2.COLOR_BGR2RGB)
 
 box_info = face_recognition.face_locations(rgb, model = "hog")

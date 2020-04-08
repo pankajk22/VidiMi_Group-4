@@ -16,14 +16,18 @@
         "express": "^4.17.1",
         "express-ejs-layouts": "^2.5.0",
         "express-fileupload": "^1.1.6",
+        "express-request-id": "^1.4.1",
         "express-session": "^1.17.0",
+        "extract-zip": "^2.0.0",
         "formidable": "^1.2.2",
+        "fs": "0.0.1-security",
         "joi": "^14.3.1",
         "jquery": "^3.4.1",
         "mongoose": "^5.8.2",
         "passport": "^0.4.1",
         "passport-local": "^1.0.0",
-        "serve-favicon": "^2.5.0"
+        "serve-favicon": "^2.5.0",
+        "zlib": "^1.0.5"
     },
     "devDependencies": {
         "nodemon": "^2.0.2"
