@@ -1,3 +1,42 @@
+/* Drag and drop menu */
+
+.dropHere {
+    position: absolute;
+    width: 30%;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    box-shadow: 2px 3px 1px 1px #888888;
+    border: 1px dashed grey;
+}
+
+.dropHere p {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    color: black;
+    font-family: Arial;
+}
+
+.dropHere input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    opacity: 0;
+}
+
+.dropHere div {
+    padding-left: 35px;
+    padding-right: 35px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+
 /*//////////////////////////////////////////////////////////////////
 [ FONT ]*/
 

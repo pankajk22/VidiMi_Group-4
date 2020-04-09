@@ -1,19 +1,21 @@
 <div class="limiter row">
     <form enctype="multipart/form-data" id="detect_hazard" class="container-login100" method="POST" action="/detect_hazard">
-        <div class="w-50" style="text-align: -webkit-center;">
-            <div class="wrap-login100">
-                <i class="material-icons w-100" style="font-size:36px; text-align: center; margin-bottom: 10px;">cloud_upload</i>
-                <div style='height: 0px;width: 0px; overflow:hidden;'><input name="video1" id="upfile1" type="file" value="upload" onchange="sub1(this)" /></div>
-                <a id="uploadButton1" onclick="getFile1()" type="button" class="w-100 btn btn-primary btn-color" style="color: white; margin-bottom: 10px;">Choose video to Upload</a>
-                <a class="btn button">Or drag and drop it here</a>
+        <div class="w-50" style="display: flex;justify-content: center;">
+            <div class="dropHere">
+                <input id="upfile1" name="video1" type="file" value="upload" onchange="sub1(this)" />
+                <div>
+                    <i class="material-icons w-100" style="font-size:36px; text-align: center; margin-bottom: 10px;">cloud_upload</i>
+                    <p id="uploadButton1">Drag and drop a video or click to upload</p>
+                </div>
             </div>
         </div>
-        <div class="w-50" style="text-align: -webkit-center;">
-            <div class="wrap-login100">
-                <i class="material-icons w-100" style="font-size:36px; text-align: center; margin-bottom: 10px;">cloud_upload</i>
-                <div style='height: 0px;width: 0px; overflow:hidden;'><input name="video2" id="upfile2" type="file" value="upload" onchange="sub2(this)" /></div>
-                <a id="uploadButton2" onclick="getFile2()" type="button" class="w-100 btn btn-primary btn-color" style="color: white; margin-bottom: 10px;">Choose video to upload</a>
-                <a class="btn button">Or drag and drop it here</a>
+        <div class="w-50" style="display: flex;justify-content: center;">
+            <div class="dropHere">
+                <input id="upfile2" name="video2" type="file" value="upload" onchange="sub2(this)" />
+                <div>
+                    <i class="material-icons w-100" style="font-size:36px; text-align: center; margin-bottom: 10px;">cloud_upload</i>
+                    <p id="uploadButton2">Drag and drop a video or click to upload</p>
+                </div>
             </div>
         </div>
         <button type="submit" class="btn btn-primary btn-color" style="color: white; align-content: center;">Compute</button>

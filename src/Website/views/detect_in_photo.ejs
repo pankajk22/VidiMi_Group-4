@@ -1,19 +1,21 @@
 <div class="limiter row">
     <form enctype="multipart/form-data" id="detect_in_photo" class="container-login100" method="POST" action="/detect_in_photo">
-        <div class="w-50" style="text-align: -webkit-center;">
-            <div class="wrap-login100">
-                <i class="material-icons w-100" style="font-size:36px; text-align: center; margin-bottom: 10px;">cloud_upload</i>
-                <div style='height: 0px;width: 0px; overflow:hidden;'><input id="upfile1" name="zip" type="file" value="upload" onchange="sub1(this)" /></div>
-                <a id="uploadButton1" onclick="getFile1()" type="button" class="w-100 btn btn-primary btn-color" style="color: white; margin-bottom: 10px;">Choose zip file to Upload</a>
-                <a class="btn button">Or drag and drop it here</a>
+        <div class="w-50" style="display: flex;justify-content: center;">
+            <div class="dropHere" style="padding: 0px;">
+                <input id="upfile1" name="zip" type="file" value="upload" onchange="sub1(this)" />
+                <div>
+                    <i class="material-icons w-100" style="font-size:36px; text-align: center; margin-bottom: 10px;">cloud_upload</i>
+                    <p id="uploadButton1">Drag and drop a zip file or click to upload</p>
+                </div>
             </div>
         </div>
-        <div class="w-50" style="text-align: -webkit-center;">
-            <div class="wrap-login100">
-                <i class="material-icons w-100" style="font-size:36px; text-align: center; margin-bottom: 10px;">cloud_upload</i>
-                <div style='height: 0px;width: 0px; overflow:hidden;'><input id="upfile2" name="photo" type="file" value="upload" onchange="sub2(this)" /></div>
-                <a id="uploadButton2" onclick="getFile2()" type="button" class="w-100 btn btn-primary btn-color" style="color: white; margin-bottom: 10px;">Choose photo to upload</a>
-                <a class="btn button">Or drag and drop it here</a>
+        <div class="w-50" style="display: flex;justify-content: center;">
+            <div class="dropHere" style="padding: 0px;">
+                <input id="upfile2" name="photo" type="file" value="upload" onchange="sub2(this)" />
+                <div>
+                    <i class="material-icons w-100" style="font-size:36px; text-align: center; margin-bottom: 10px;">cloud_upload</i>
+                    <p id="uploadButton2">Drag and drop a photo or click to upload</p>
+                </div>
             </div>
         </div>
         <button type="submit" class="btn btn-primary btn-color" style="color: white; align-content: center;">Compute</button>
@@ -21,10 +23,6 @@
 </div>
 
 <script>
-    function getFile1() {
-        document.getElementById("upfile1").click();
-    }
-
     function sub1(obj) {
         var file = obj.value;
         console.log(obj);
@@ -33,10 +31,6 @@
         if (fileName == '')
             document.getElementById("uploadButton1").innerHTML = "Choose zip file to Upload";
         event.preventDefault();
-    }
-
-    function getFile2() {
-        document.getElementById("upfile2").click();
     }
 
     function sub2(obj) {

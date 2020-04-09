@@ -282,7 +282,7 @@ router.get('/get_id/result', (req, res) => {
 
 // add_to_db Page
 router.get('/add_to_db', (req, res) => res.render('login_page'));
-router.post('/admin_login', (req, res) => res.render('add_to_db'));
+router.post('/add_to_db/logged_in', (req, res) => res.render('add_to_db'));
 router.post('/add_to_db', (req, res) => {
     var form = new formidable.IncomingForm();
     form.parse(req, function(err, fields, files) {

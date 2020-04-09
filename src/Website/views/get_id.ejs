@@ -1,12 +1,11 @@
 <div class="limiter row">
     <form enctype="multipart/form-data" id="get_id" class="container-login100" method="POST" action="/get_id">
-        <div class="w-100" style="text-align: -webkit-center;">
-            <div class="w-50" style="text-align: -webkit-center;">
-                <div class="wrap-login100">
+        <div class="w-100" style="display: flex;justify-content: center;">
+            <div class="dropHere" style="padding: 0px;">
+                <input id="upfile" name="photo" type="file" value="upload" onchange="sub(this)" />
+                <div>
                     <i class="material-icons w-100" style="font-size:36px; text-align: center; margin-bottom: 10px;">cloud_upload</i>
-                    <div style='height: 0px;width: 0px; overflow:hidden;'><input id="upfile" name="photo" type="file" value="upload" onchange="sub(this)" /></div>
-                    <a id="uploadButton" type="button" class="w-100 btn btn-primary btn-color" style="color: white; margin-bottom: 10px;" onclick="getFile()">Choose photo to id</a>
-                    <a class="btn button">Or drag and drop it here</a>
+                    <p id="uploadButton">Drag and drop a photo or click to id</p>
                 </div>
             </div>
         </div>
@@ -14,16 +13,12 @@
     </form>
 </div>
 <script>
-    function getFile() {
-        document.getElementById("upfile").click();
-    }
-
     function sub(obj) {
         var file = obj.value;
         var fileName = file.split("\\");
         document.getElementById("uploadButton").innerHTML = fileName[fileName.length - 1];
         if (fileName == '')
-            document.getElementById("uploadButton").innerHTML = "Choose photo to id";
+            document.getElementById("uploadButton").innerHTML = "Drag and drop a photo to id or click";
         event.preventDefault();
     }
 </script>
