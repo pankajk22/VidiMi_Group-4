@@ -10,7 +10,6 @@ const app = express();
 // static files
 app.use(express.static("public"));
 
-
 // Website icon
 var favicon = require('serve-favicon');
 app.use(favicon(__dirname + '/public/images/icons/doctor.png'));
