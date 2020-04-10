@@ -8,10 +8,12 @@ import sys
 fileNames = sys.argv[1]
 
 print("Load encodings")
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-pickle_dir = os.path.join(BASE_DIR, "add_to_db_labels.pickle")
-data = pickle.loads(open(pickle_dir, 'rb').read())
 
+# specifying the folder for the database
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+pickle_dir = os.path.join(BASE_DIR, "database")
+
+# specifying the target image file name 
 test_img_dir = os.path.join(BASE_DIR, fileNames + ".jpg")
 sample_img = cv2.imread(test_img_dir)
 rgb = cv2.cvtColor(sample_img, cv2.COLOR_BGR2RGB)
@@ -34,25 +36,38 @@ while (True):
     encodings = face_recognition.face_encodings(rgb, box_info)
 '''
 
-for encoding in encodings:
-    matches = face_recognition.compare_faces(data["encodings"], encoding, tolerance =0.37)
-    name = "unknown"
+# Walking through each .pickle file in the database
+for filename in os.listdir(pickle_dir):
+    fileDir = os.path.join(pickle_dir, filename)
+    print(fileDir)
+    data = pickle.loads(open(fileDir, 'rb').read())
+    index = 0
+    for encoding in encodings:
+        matches = face_recognition.compare_faces(data["encodings"], encoding, tolerance =0.37)
+        name = "unknown"
 
+        # if the encoding mathces then name will be taken from the database
+        if True in matches:
 
-    if True in matches:
+            matchedIndx = [i for (i,b) in enumerate(matches) if b]
+            count = {}
 
-        matchedIndx = [i for (i,b) in enumerate(matches) if b]
-        count = {}
+            for i in matchedIndx:
+                name = data["names"][i]
+                count[name] = count.get(name, 0) + 1
 
+            name = max(count, key= count.get)
+            
+        # for the first time this will be false and hence names will be appended
+        # for each other time it will just replace the name 'unknown'
+        if(len(names) > index):
+            if(names[index] == 'unknown'):
+                names[index] = name
+        else:
+            names.append(name)
+        index = index + 1
 
-        for i in matchedIndx:
-            name = data["names"][i]
-            count[name] = count.get(name, 0) + 1
-
-        name = max(count, key= count.get)
-    
-    names.append(name)
-
+# adding the boxes with names on the target image file
 for ((x,y,w,h), name) in zip(box_info, names):
     color = (0,0,255)
     stroke = 5
@@ -62,11 +77,12 @@ for ((x,y,w,h), name) in zip(box_info, names):
     font = cv2.FONT_HERSHEY_SIMPLEX
     cv2.putText(sample_img, name, (h,x), font, 2, color, stroke, cv2.LINE_AA)
 
+# Saving the result image file
 result_img_dir = os.path.join(BASE_DIR, "../public/images/getId/" + fileNames + ".png")
 print('Saving the result file at "/public/images/getId/' + fileNames + '.png"' )
 cv2.imwrite(result_img_dir, sample_img)
 
-# deleting test image
+# deleting test image file
 os.remove(test_img_dir)
 
 #cap.release()

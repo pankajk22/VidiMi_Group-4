@@ -15,6 +15,7 @@ router.post('/detect_in_photo', (req, res) => {
     var form = new formidable.IncomingForm();
     form.parse(req, function(err, fields, files) {
         const { zip, photo } = files;
+        // Joi schema for validating the input
         const schema = {
             zip: Joi.object({
                 name: Joi.string().required(),
@@ -37,20 +38,22 @@ router.post('/detect_in_photo', (req, res) => {
                 errors.push(message);
             });
         }
-        console.log(errors)
+        console.log(errors);
+        // if errors in validation then return with error else run the python files
         if (errors.length > 0) {
             res.write(errors.toString());
             res.end();
             res.send()
         } else {
-            var response = ''
-
+            var response = '';
+            // Saving the zip file
             var oldpath = zip.path;
             var newpath = __dirname + `/../python/images/${req.sessionID}.zip`;
             fs.rename(oldpath, newpath, function(err) {
                 if (err) throw err;
                 response += 'Zip File uploaded and moved!\n';
             });
+            // Saving the test image file
             var oldpath = photo.path;
             var newpath = __dirname + `/../python/${req.sessionID}.jpg`;
             fs.rename(oldpath, newpath, function(err) {
@@ -58,7 +61,7 @@ router.post('/detect_in_photo', (req, res) => {
                 response += 'Photo uploaded and moved!';
             });
 
-
+            // Running the 'face_rec.py' file to genrate a pickle file for the test subject
             var faceRecLogs;
             console.log('\n-----Generating pickle-----\n');
             const python = spawn('python', ['python/face_rec.py', `${req.sessionID}`]);
@@ -68,8 +71,10 @@ router.post('/detect_in_photo', (req, res) => {
             });
             python.on('close', (code) => {
                 console.log(`child process close all stdio with code ${code}`);
-                // send data to browser
-                console.log(faceRecLogs)
+                // printing logs to console
+                console.log(faceRecLogs);
+
+                // Running the 'face_image.py' file to search in the pickle file
                 var faceImageLogs;
                 console.log('\n-----Detecting in picture-----\n');
                 const python = spawn('python', ['python/face_image.py', `${req.sessionID}`]);
@@ -79,10 +84,10 @@ router.post('/detect_in_photo', (req, res) => {
                 });
                 python.on('close', (code) => {
                     console.log(`child process close all stdio with code ${code}`);
-                    // send data to browser
-                    console.log(faceImageLogs)
-                    req.session.img = `/images/dip/${req.sessionID}.png`
-                    res.redirect('detect_in_photo/result')
+                    // printing logs to console
+                    console.log(faceImageLogs);
+                    req.session.img = `/images/dip/${req.sessionID}.png`;
+                    res.redirect('detect_in_photo/result');
                 });
             });
 
@@ -265,10 +270,11 @@ router.post('/get_id', (req, res) => {
     });
 });
 
-// detect_in_photo result Page
+// get_id result Page
 router.get('/get_id/result', (req, res) => {
     const img = req.session.img;
     req.session.img = undefined
+    console.log(img)
     if (typeof img != 'undefined') {
         res.render('result_page', {
             img: img,
